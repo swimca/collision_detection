@@ -11,13 +11,16 @@ set (CMAKE_C_STANDARD_REQUIRED True)
 # define the common source files and headers used by all targets
 set(COMMON_SOURCES
     src/mesh.c
+    src/collision.c
     src/color.c
-    src/position.c
+    src/point.c
     src/vertex.c
+    src/vector.c
     src/triangle.c
     src/test.c)
 
-set(COMMON_LIBS)
+set(COMMON_LIBS
+    m)
 
 set(COMMON_DIRS
     /usr/include)

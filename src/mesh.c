@@ -35,12 +35,12 @@ void CDMesh_create(struct CDMesh *mesh, unsigned long vertices_x,
         for(size_t col = 0; col < num_cols; col++) {
             size_t triangle_a_idx = row * num_cols * 2 + 2 * col;
             size_t triangle_b_idx = triangle_a_idx + 1;
-            mesh->triangles[triangle_a_idx].p1 = &mesh->vertices[row*vertices_x + col];
-            mesh->triangles[triangle_a_idx].p2 = &mesh->vertices[row*vertices_x + col + 1];
-            mesh->triangles[triangle_a_idx].p3 = &mesh->vertices[(row+1)*vertices_x + col + 1];
-            mesh->triangles[triangle_b_idx].p1 = &mesh->vertices[row*vertices_x + col];
-            mesh->triangles[triangle_b_idx].p2 = &mesh->vertices[(row+1)*vertices_x + col + 1];
-            mesh->triangles[triangle_b_idx].p3 = &mesh->vertices[(row+1)*vertices_x + col];
+            mesh->triangles[triangle_a_idx].a = &mesh->vertices[row*vertices_x + col];
+            mesh->triangles[triangle_a_idx].b = &mesh->vertices[row*vertices_x + col + 1];
+            mesh->triangles[triangle_a_idx].c = &mesh->vertices[(row+1)*vertices_x + col + 1];
+            mesh->triangles[triangle_b_idx].a = &mesh->vertices[row*vertices_x + col];
+            mesh->triangles[triangle_b_idx].b = &mesh->vertices[(row+1)*vertices_x + col + 1];
+            mesh->triangles[triangle_b_idx].c = &mesh->vertices[(row+1)*vertices_x + col];
         }
     }
 }

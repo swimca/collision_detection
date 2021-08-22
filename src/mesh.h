@@ -1,3 +1,6 @@
+#ifndef CD_MESH_H
+#define CD_MESH_H
+
 #include <stdlib.h>
 #include "triangle.h"
 #include "vertex.h"
@@ -13,3 +16,5 @@ void CDMesh_create(struct CDMesh *mesh, unsigned long vertices_x,
         unsigned long vertices_z, float size_x, float size_z);
 
 void CDMesh_print(struct CDMesh *mesh);
+
+#endif

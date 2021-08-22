@@ -1,10 +1,10 @@
 #ifndef CD_VERTEX_H
 #define CD_VERTEX_H
 #include "color.h"
-#include "position.h"
+#include "point.h"
 
 struct CDVertex {
-    struct CDPosition p;
+    struct CDPoint p;
     struct CDColor c;
 };
 

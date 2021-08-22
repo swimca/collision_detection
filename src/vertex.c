@@ -3,7 +3,6 @@
 
 void CDVertex_print(struct CDVertex *v) {
     printf("vertex ");
-    CDPosition_print(&v->p);
+    CDPoint_print(&v->p);
     CDColor_print(&v->c);
-};
-
+}

@@ -7,9 +7,9 @@
  * may reference the same vertices
  */
 struct CDTriangle {
-    struct CDVertex *p1;
-    struct CDVertex *p2;
-    struct CDVertex *p3;
+    struct CDVertex *a;
+    struct CDVertex *b;
+    struct CDVertex *c;
 };
 
 void CDTriangle_print(struct CDTriangle *triangle);
