@@ -14,15 +14,7 @@ int main() {
     CDMesh_print(&mesh);
 
     // create a ray above the plane and directed down the negative z axis
-    struct CDRay ray;
 
-    // populate an array of triangle pointers that contain the triangles in
-    // the mesh that intersect with the ray
-    struct CDPoint intersection;
-    CDCollision_ray_mesh(&intersection, &mesh, &ray);
-
-    // test intersection of a ray and a triangle
-    
     // define a triangle on the xy plane
     struct CDVertex triangle_vertices[3];
     triangle_vertices[0].p = (struct CDPoint){0.0f, 0.0f, 0.0f};
@@ -34,22 +26,26 @@ int main() {
     triangle.c = &triangle_vertices[2];
 
     // define a ray that is on the same plane as the triangle
-    ray.origin = (struct CDPoint){0.0f, 0.0f, 0.0f};
-    ray.vector = (struct CDVector){0.0f, 1.0f, 0.0f};
+    struct CDRay ray_parallel;
+    ray_parallel.origin = (struct CDPoint){0.0f, 0.0f, 0.0f};
+    ray_parallel.vector = (struct CDVector){0.0f, 1.0f, 0.0f};
 
     // verify the ray does not intersect
     float t;
+    struct CDPoint intersection;
     assert(false == CDCollision_ray_triangle(&intersection, &t,
-                &triangle, &ray));
+                &triangle, &ray_parallel));
 
-    // define a ray that is not on the same plane as the triangle
-    struct CDRay ray2;
-    ray2.origin = (struct CDPoint){0.0f, 0.0f, 1.0f};
-    ray2.vector = (struct CDVector){0.0f, 0.0f, 1.0f};
-
-    // verify the ray does not intersect
-    assert(true == CDCollision_ray_triangle(&intersection, &t, &triangle,
-                &ray2));
+    // define a ray that intersects with the triangle and verify the
+    // point and vector ray scale are as expected
+    struct CDRay ray_intersects;
+    ray_intersects.origin = (struct CDPoint){0.1f, 0.1f, 1.0f};
+    ray_intersects.vector = (struct CDVector){0.0f, 0.0f, -1.0f};
+    assert(true == CDCollision_ray_triangle(&intersection, &t,
+                &triangle, &ray_intersects));
+    CDPoint_print(&intersection);
+    assert(intersection.x == 0.1f && intersection.y == 0.1f &&
+            intersection.z == 0.0f);
 
     return EXIT_SUCCESS;
 }

@@ -14,6 +14,7 @@ set(COMMON_SOURCES
     src/collision.c
     src/color.c
     src/point.c
+    src/ray.c
     src/vertex.c
     src/vector.c
     src/triangle.c
