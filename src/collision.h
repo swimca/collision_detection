@@ -15,5 +15,6 @@ void CDCollision_ray_mesh(struct CDPoint *intersection,
 /* Returns true if the given ray collides with the given triangle, or false
  * otherwise.
  */
-bool CDCollision_ray_triangle(struct CDTriangle *triangle, struct CDRay *ray);
+bool CDCollision_ray_triangle(struct CDPoint *intersection,
+        float *t, struct CDTriangle *triangle, struct CDRay *ray);
 #endif

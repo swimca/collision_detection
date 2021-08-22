@@ -34,19 +34,22 @@ int main() {
     triangle.c = &triangle_vertices[2];
 
     // define a ray that is on the same plane as the triangle
-    ray.a = (struct CDPoint){0.0f, 0.0f, 0.0f};
-    ray.b = (struct CDPoint){0.0f, 1.0f, 0.0f};
+    ray.origin = (struct CDPoint){0.0f, 0.0f, 0.0f};
+    ray.vector = (struct CDVector){0.0f, 1.0f, 0.0f};
 
     // verify the ray does not intersect
-    assert(false == CDCollision_ray_triangle(&triangle, &ray));
+    float t;
+    assert(false == CDCollision_ray_triangle(&intersection, &t,
+                &triangle, &ray));
 
     // define a ray that is not on the same plane as the triangle
     struct CDRay ray2;
-    ray2.a = (struct CDPoint){0.0f, 0.0f, 1.0f};
-    ray2.b = (struct CDPoint){0.0f, 0.0f, 2.0f};
+    ray2.origin = (struct CDPoint){0.0f, 0.0f, 1.0f};
+    ray2.vector = (struct CDVector){0.0f, 0.0f, 1.0f};
 
     // verify the ray does not intersect
-    assert(true == CDCollision_ray_triangle(&triangle, &ray2));
+    assert(true == CDCollision_ray_triangle(&intersection, &t, &triangle,
+                &ray2));
 
     return EXIT_SUCCESS;
 }

@@ -22,6 +22,24 @@ float CDVector_dot(struct CDVector *v1, struct CDVector *v2) {
     return sqrtf(v1->x*v2->x + v1->y*v2->y + v1->z*v2->z);
 }
 
+void CDVector_subtract(struct CDVector *result, struct CDVector *v1,
+        struct CDVector *v2) {
+    result->x = v2->x - v1->x;
+    result->y = v2->y - v1->y;
+    result->z = v2->z - v1->z;
+}
+
 void CDVector_print(struct CDVector *v) {
     printf("x: %0.3f, y: %0.3f, z: %0.3f\n", v->x, v->y, v->z);
 }
+
+void CDVector_scale(struct CDVector *const result, struct CDVector *const in,
+        float scale) {
+    result->x = in->x * scale;
+    result->y = in->y * scale;
+    result->z = in->z * scale;
+}
+
+void CDVector_add(struct CDVector *result, struct CDVector *v1,
+        struct CDVector *v2);
+
