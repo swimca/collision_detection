@@ -27,7 +27,7 @@ progress.
 ```
 
 # Types
-
+The following types have been defined for creating your own 3D values.
 * CDPoint - a point in 3D space
 * CDVector - a value with direction and magnitude
 * CDVertex - a corner of CDTriangle 
@@ -36,6 +36,8 @@ progress.
 * CDMesh - a collection of triangles and the vertices they reference
 
 # Tests
+The following functions have been defined for checking for collisions of
+these primitives with each other.
 * CDCollision_ray_triangle() - tests whether a ray intersects with a
   a triangle and returns the intersection point in the triangle and the
   intersection point in the ray if so.
