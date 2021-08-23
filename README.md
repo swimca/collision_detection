@@ -39,5 +39,5 @@ The following types have been defined for creating your own 3D values.
 The following functions have been defined for checking for collisions of
 these primitives with each other.
 * CDCollision_ray_triangle() - tests whether a ray intersects with a
-  a triangle and returns the intersection point in the triangle and the
+  a triangle and provides the intersection point in the triangle and the
   intersection point in the ray if so.
