@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "kdtree.h"
-#define MIN_ELEMENTS 6
+#define MIN_ELEMENTS 10
 
 /* construct a kd tree by partitioning a mesh of triangles.  The
  * kd tree nodes maintain a linked list of pointers to the mesh.
@@ -53,7 +53,8 @@ struct CDKDNode *tree_helper(struct CDKDNode *nodes,
         enum CDKDAxis axis) {
     // if there are no elements to be partitioned in the tree,
     // do not add a new node, just return NULL
-    if(elements == NULL) {
+    if(num_elements == 0) {
+        printf("not creating node, no elements to split\n");
         return NULL;
     }
     struct CDKDNode *new_node = &nodes[*num_nodes];
@@ -61,12 +62,13 @@ struct CDKDNode *tree_helper(struct CDKDNode *nodes,
     // initialize the node
     new_node->axis = axis;
     new_node->split = mean(elements, axis);
-    *num_nodes = *num_nodes + 1;
     if(num_elements < MIN_ELEMENTS) {
         new_node->elements = elements;
         new_node->num_elements = num_elements;
+        printf("created leaf node with %lu elements\n", new_node->num_elements);
         return new_node;
     }
+    *num_nodes = *num_nodes + 1;
 
     // given a list of the elements we should process, and the axis
     // we should process them on and the split point on the axis,
@@ -81,7 +83,7 @@ struct CDKDNode *tree_helper(struct CDKDNode *nodes,
 
     // partition the elements list into two separate lists
     while(elements != NULL) {
-        if(is_left_element(elements, nodes[*num_nodes].split, axis)) {
+        if(is_left_element(elements, new_node->split, axis)) {
             struct CDKDElement *prev = left_elements;
             left_elements = elements;
             elements = elements->next;
@@ -95,6 +97,8 @@ struct CDKDNode *tree_helper(struct CDKDNode *nodes,
             num_right_elements++;
         }
     }
+    printf("created kd tree node %lu with %lu elements, axis: %d, split %0.3f, num left elements: %lu, num_right: %lu\n",
+            *num_nodes, num_elements, new_node->axis, new_node->split, num_left_elements, num_right_elements);
     new_node->left = tree_helper(nodes, num_nodes, left_elements,
             num_left_elements, next_axis);
     new_node->right = tree_helper(nodes, num_nodes, right_elements,

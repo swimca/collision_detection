@@ -11,7 +11,8 @@ int main() {
     // width and height and the given number of vertices in the x and y
     // axes
     struct CDMesh mesh;
-    CDMesh_create(&mesh, 3, 3, 100.0f, 100.0f);
+    CDMesh_create(&mesh, 11, 11, 100.0f, 100.0f);
+    CDMesh_print(&mesh);
 
     // create a ray above the plane and directed down the negative z axis
 
@@ -49,7 +50,7 @@ int main() {
     // create a dk tree from the mesh
     struct CDKDTree tree;
     CDKDTree_init(&tree, &mesh);
-    CDKDTree_print(&tree);
+    //CDKDTree_print(&tree);
     CDKDTree_free(&tree);
     return EXIT_SUCCESS;
 }
