@@ -1,5 +1,7 @@
 #include <stdbool.h>
 #include "kdtree.h"
+#include "plane.h"
+#include "collision.h"
 #define MIN_ELEMENTS 10
 
 /* construct a kd tree by partitioning a mesh of triangles.  The
@@ -128,9 +130,69 @@ void CDKDTree_free(struct CDKDTree *tree) {
     free(tree->elements);
 }
 
+struct CDTriangle *ray_helper(struct CDKDNode *node, struct CDRay *ray) {
+    if(node == NULL)
+        // nothing to search, no triangles
+        return NULL;
+
+    if(node->num_elements > 0) {
+        // we are at a leaf node, check the triangles to see which intersect
+        struct CDKDElement *e = node->elements;
+        while(e != NULL) {
+            struct CDPoint intersection;
+            float t;
+            if(CDCollision_ray_triangle(&intersection, &t, e->triangle, ray)) {
+                return e->triangle;
+            }
+            e = e->next;
+        }
+        return NULL;
+    }
+
+    // we are not at a leaf node yet, decide which child node to search first
+    
+    // if the origin of the ray is on the left of the split, search the left
+    // node first, otherwise search the right
+    struct CDPlane plane;
+    plane.d = node->split;
+    switch(node->axis) {
+        case CDKD_AXIS_X:
+            plane.n = (struct CDVector){1.0f, 0.0f, 0.0f};
+            break;
+        case CDKD_AXIS_Y:
+            plane.n = (struct CDVector){0.0f, 1.0f, 0.0f};
+            break;
+        case CDKD_AXIS_Z:
+            plane.n = (struct CDVector){0.0f, 0.0f, 1.0f};
+            break;
+        default:
+            break;
+    };
+
+    struct CDPoint intersection;
+    float t;
+
+    if(CDCollision_ray_plane(&intersection, &t, &plane, ray)) {
+        switch(node->axis) {
+            case CDKD_AXIS_X:
+                plane.n = (struct CDVector){1.0f, 0.0f, 0.0f};
+                break;
+            case CDKD_AXIS_Y:
+                plane.n = (struct CDVector){0.0f, 1.0f, 0.0f};
+                break;
+            case CDKD_AXIS_Z:
+                plane.n = (struct CDVector){0.0f, 0.0f, 1.0f};
+                break;
+            default:
+            break;
+        };
+    }
+    return NULL;
+}
+
 struct CDTriangle *CDKDTree_ray(struct CDKDTree *tree,
         struct CDRay *ray) {
-    return NULL;
+    return ray_helper(tree->root, ray);
 }
 
 void CDKDNode_print(struct CDKDNode *node) {
