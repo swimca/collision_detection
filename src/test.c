@@ -47,10 +47,30 @@ int main() {
     assert(intersection.x == 0.1f && intersection.y == 0.1f &&
             intersection.z == 0.0f);
 
+    // create a plane
+    struct CDPlane plane;
+    plane.d = 1.0f;
+    plane.n = (struct CDVector) {0.7071f, 0.0f, 0.7071f};
+
+    // calculate the intersection of the ray with the plane.
+    struct CDRay ray;
+    ray.origin = (struct CDPoint) {0.0f, 0.0f, 3.0f};
+    ray.vector = (struct CDVector) {0.0f, 0.0f, -1.0f};
+    assert(CDCollision_ray_plane(&intersection, &t, &plane, &ray));
+    printf("t2: %0.3f\n", t);
+    printf("intersection2: ");
+    CDPoint_print(&intersection);
+
+    // verify intersection of ray pointing away from the plane fails
+    struct CDRay ray2;
+    ray2.origin = (struct CDPoint) {0.0f, 0.0f, 3.0f};
+    ray2.vector = (struct CDVector) {1.0f, 0.0f, 0.0f};
+    assert(!CDCollision_ray_plane(&intersection, &t, &plane, &ray2));
+
     // create a kd tree from the mesh
     struct CDKDTree tree;
     CDKDTree_init(&tree, &mesh);
-    CDKDTree_print(&tree);
+    //CDKDTree_print(&tree);
 
     CDKDTree_free(&tree);
     return EXIT_SUCCESS;

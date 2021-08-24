@@ -3,8 +3,19 @@
 #include "collision.h"
 
 
-void CDCollision_ray_mesh(struct CDPoint *intersection,
-        struct CDMesh *mesh, struct CDRay *ray) {
+bool CDCollision_ray_plane(struct CDPoint *intersection,
+        float *t, struct CDPlane *plane, struct CDRay *ray) {
+    struct CDVector origin_vector;
+    struct CDPoint origin = {0.0f, 0.0f, 0.0f};
+    CDVector_from_points(&origin_vector, &origin, &ray->origin);
+    *t = (plane->d -CDVector_dot(&plane->n, &origin_vector))
+        / CDVector_dot(&plane->n, &ray->vector);
+
+    if(*t >= 0.0f) {
+        CDRay_point(intersection, ray, *t);
+        return true; 
+    }
+    return false;
 }
 
 bool CDCollision_ray_triangle(struct CDPoint *intersection,
