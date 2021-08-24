@@ -47,10 +47,11 @@ int main() {
     assert(intersection.x == 0.1f && intersection.y == 0.1f &&
             intersection.z == 0.0f);
 
-    // create a dk tree from the mesh
+    // create a kd tree from the mesh
     struct CDKDTree tree;
     CDKDTree_init(&tree, &mesh);
-    //CDKDTree_print(&tree);
+    CDKDTree_print(&tree);
+
     CDKDTree_free(&tree);
     return EXIT_SUCCESS;
 }

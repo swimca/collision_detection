@@ -37,9 +37,6 @@ void CDKDTree_init(struct CDKDTree *tree, struct CDMesh *mesh);
 
 void CDKDTree_free(struct CDKDTree *tree);
 
-/* find the first triangle that intersects with the given ray
- * in the mesh, or rreturns NULL if no such triangle exists.
- */
 struct CDTriangle *CDKDTree_ray(struct CDKDTree *tree,
         struct CDRay *ray);
 

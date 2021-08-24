@@ -13,6 +13,7 @@ set(COMMON_SOURCES
     src/mesh.c
     src/collision.c
     src/color.c
+    src/kdtree.c
     src/point.c
     src/ray.c
     src/vertex.c
