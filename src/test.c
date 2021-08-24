@@ -3,6 +3,7 @@
 #include "collision.h"
 #include "vertex.h"
 #include "assert.h"
+#include "kdtree.h"
 
 int main() {
 
@@ -11,7 +12,6 @@ int main() {
     // axes
     struct CDMesh mesh;
     CDMesh_create(&mesh, 3, 3, 100.0f, 100.0f);
-    CDMesh_print(&mesh);
 
     // create a ray above the plane and directed down the negative z axis
 
@@ -43,9 +43,13 @@ int main() {
     ray_intersects.vector = (struct CDVector){0.0f, 0.0f, -1.0f};
     assert(true == CDCollision_ray_triangle(&intersection, &t,
                 &triangle, &ray_intersects));
-    CDPoint_print(&intersection);
     assert(intersection.x == 0.1f && intersection.y == 0.1f &&
             intersection.z == 0.0f);
 
+    // create a dk tree from the mesh
+    struct CDKDTree tree;
+    CDKDTree_init(&tree, &mesh);
+    CDKDTree_print(&tree);
+    CDKDTree_free(&tree);
     return EXIT_SUCCESS;
 }
