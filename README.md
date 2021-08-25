@@ -37,7 +37,7 @@ The following types have been defined for creating your own 3D values.
 * CDKDTree - a kd tree that partitions a mesh of triangles
 * CDPlane - a distance and a unit normal
 
-# Tests
+# Collision Checks
 The following functions have been defined for checking for collisions of
 these primitives with each other.
 * CDCollision_ray_triangle() - tests whether a ray intersects with a
