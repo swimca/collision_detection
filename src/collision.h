@@ -4,17 +4,20 @@
 #include <stdbool.h>
 #include "mesh.h"
 #include "ray.h"
-
-/* Set the pointer to the triangle that the ray intersects with in the
- * given mesh.  The pointer will be set to NULL if the ray does not intersect
- * the mesh.
- */
-void CDCollision_ray_mesh(struct CDPoint *intersection,
-        struct CDMesh *mesh, struct CDRay *ray);
+#include "plane.h"
 
 /* Returns true if the given ray collides with the given triangle, or false
- * otherwise.
+ * otherwise.  If there is a collision, the point of intersection and the
+ * position on the ray is provided.
  */
 bool CDCollision_ray_triangle(struct CDPoint *intersection,
         float *t, struct CDTriangle *triangle, struct CDRay *ray);
+
+/* Returns true if the given ray collides with the given plane, or false
+ * otherwise.  If there is a collision, the point of intersection on the plane
+ * and the position on the ray is provided.
+ */
+bool CDCollision_ray_plane(struct CDPoint *intersection,
+        float *t, struct CDPlane *plane, struct CDRay *ray);
+
 #endif

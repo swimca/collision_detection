@@ -51,11 +51,11 @@ void CDMesh_free(struct CDMesh *mesh) {
 }
 
 void CDMesh_print(struct CDMesh *mesh) {
-    printf("vertices: \n");
+    printf("vertices: %lu\n", mesh->num_vertices);
     for(size_t i = 0; i < mesh->num_vertices; i++) {
         CDVertex_print(&mesh->vertices[i]);
     }
-    printf("triangles: \n");
+    printf("triangles: %lu\n", mesh->num_triangles);
     for(size_t i = 0; i < mesh->num_triangles; i++) {
         CDTriangle_print(&mesh->triangles[i]);
     }

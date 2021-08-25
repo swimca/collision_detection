@@ -3,6 +3,7 @@
 #include "collision.h"
 #include "vertex.h"
 #include "assert.h"
+#include "kdtree.h"
 
 int main() {
 
@@ -10,7 +11,7 @@ int main() {
     // width and height and the given number of vertices in the x and y
     // axes
     struct CDMesh mesh;
-    CDMesh_create(&mesh, 3, 3, 100.0f, 100.0f);
+    CDMesh_create(&mesh, 11, 11, 100.0f, 100.0f);
     CDMesh_print(&mesh);
 
     // create a ray above the plane and directed down the negative z axis
@@ -43,9 +44,47 @@ int main() {
     ray_intersects.vector = (struct CDVector){0.0f, 0.0f, -1.0f};
     assert(true == CDCollision_ray_triangle(&intersection, &t,
                 &triangle, &ray_intersects));
-    CDPoint_print(&intersection);
     assert(intersection.x == 0.1f && intersection.y == 0.1f &&
             intersection.z == 0.0f);
 
+    // create a plane with a distance from the origin and a unit normal vector
+    struct CDPlane plane;
+    plane.d = 0.0f;
+    plane.n = (struct CDVector) {0.0f, 0.0f, 1.0f};
+
+    // calculate the intersection of the ray with the plane.
+    struct CDRay ray;
+    ray.origin = (struct CDPoint) {1.0f, 1.0f, 3.0f};
+    ray.vector = (struct CDVector) {0.0f, 0.0f, -1.0f};
+    assert(CDCollision_ray_plane(&intersection, &t, &plane, &ray));
+    printf("t2: %0.3f\n", t);
+    printf("intersection2: ");
+    CDPoint_print(&intersection);
+
+    // verify intersection of ray pointing away from the plane fails
+    struct CDRay ray2;
+    ray2.origin = (struct CDPoint) {0.0f, 0.0f, 3.0f};
+    ray2.vector = (struct CDVector) {1.0f, 0.0f, 0.0f};
+    assert(!CDCollision_ray_plane(&intersection, &t, &plane, &ray2));
+
+    // create a kd tree from the mesh
+    struct CDKDTree tree;
+    CDKDTree_init(&tree, &mesh);
+    //CDKDTree_print(&tree);
+
+    // find the triangle that intersects with the ray in the mesh
+    struct CDRay ray3;
+    ray3.origin = (struct CDPoint) {21.0f, 21.0f, 3.0f};
+    ray3.vector = (struct CDVector) {0.0f, 0.0f, -1.0f};
+
+    struct CDTriangle *result = CDKDTree_ray(&tree, &ray3);
+    printf("collided triangle:\n");
+    if(result == NULL) {
+        printf("no triangle found\n");
+    } else {
+        CDTriangle_print(result);
+    }
+
+    CDKDTree_free(&tree);
     return EXIT_SUCCESS;
 }
