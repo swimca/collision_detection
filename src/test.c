@@ -1,3 +1,4 @@
+#include <math.h>
 #include "mesh.h"
 #include "ray.h"
 #include "collision.h"
@@ -11,10 +12,13 @@ int main() {
     // width and height and the given number of vertices in the x and y
     // axes
     struct CDMesh mesh;
-    CDMesh_create(&mesh, 11, 11, 100.0f, 100.0f);
-    CDMesh_print(&mesh);
-
-    // create a ray above the plane and directed down the negative z axis
+    CDMesh_create(&mesh, 1001, 1001, 100.0f, 100.0f);
+    for(size_t i = 0; i < mesh.num_triangles; i++) {
+        struct CDTriangle *triangle = &mesh.triangles[i];
+        triangle->a->p.z = triangle->a->p.x;
+        triangle->b->p.z = triangle->c->p.x;
+        triangle->c->p.z = triangle->c->p.x;
+    }
 
     // define a triangle on the xy plane
     struct CDVertex triangle_vertices[3];
@@ -74,11 +78,10 @@ int main() {
 
     // find the triangle that intersects with the ray in the mesh
     struct CDRay ray3;
-    ray3.origin = (struct CDPoint) {21.0f, 21.0f, 3.0f};
+    ray3.origin = (struct CDPoint) {21.0f, 21.0f, 100.0f};
     ray3.vector = (struct CDVector) {0.0f, 0.0f, -1.0f};
 
     struct CDTriangle *result = CDKDTree_ray(&tree, &ray3);
-    printf("collided triangle:\n");
     if(result == NULL) {
         printf("no triangle found\n");
     } else {

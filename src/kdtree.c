@@ -2,7 +2,7 @@
 #include "kdtree.h"
 #include "plane.h"
 #include "collision.h"
-#define MIN_ELEMENTS 10
+#define MIN_ELEMENTS 20
 
 /* construct a kd tree by partitioning a mesh of triangles.  The
  * kd tree nodes maintain a linked list of pointers to the mesh.
