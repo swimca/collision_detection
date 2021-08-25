@@ -72,6 +72,19 @@ int main() {
     CDKDTree_init(&tree, &mesh);
     //CDKDTree_print(&tree);
 
+    // find the triangle that intersects with the ray in the mesh
+    struct CDRay ray3;
+    ray3.origin = (struct CDPoint) {21.0f, 21.0f, 3.0f};
+    ray3.vector = (struct CDVector) {0.0f, 0.0f, -1.0f};
+
+    struct CDTriangle *result = CDKDTree_ray(&tree, &ray3);
+    printf("collided triangle:\n");
+    if(result == NULL) {
+        printf("no triangle found\n");
+    } else {
+        CDTriangle_print(result);
+    }
+
     CDKDTree_free(&tree);
     return EXIT_SUCCESS;
 }

@@ -131,11 +131,14 @@ void CDKDTree_free(struct CDKDTree *tree) {
 }
 
 struct CDTriangle *ray_helper(struct CDKDNode *node, struct CDRay *ray) {
-    if(node == NULL)
+    if(node == NULL) {
+        printf("ray not found in this node, returning\n");
         // nothing to search, no triangles
         return NULL;
+    }
 
     if(node->num_elements > 0) {
+        printf("leaf node found, check ray-triangle collisions\n");
         // we are at a leaf node, check the triangles to see which intersect
         struct CDKDElement *e = node->elements;
         while(e != NULL) {
@@ -155,15 +158,20 @@ struct CDTriangle *ray_helper(struct CDKDNode *node, struct CDRay *ray) {
     // node first, otherwise search the right
     struct CDPlane plane;
     plane.d = node->split;
+    float axis_ray_origin;
+
     switch(node->axis) {
         case CDKD_AXIS_X:
             plane.n = (struct CDVector){1.0f, 0.0f, 0.0f};
+            axis_ray_origin = ray->origin.x;
             break;
         case CDKD_AXIS_Y:
             plane.n = (struct CDVector){0.0f, 1.0f, 0.0f};
+            axis_ray_origin = ray->origin.y;
             break;
         case CDKD_AXIS_Z:
             plane.n = (struct CDVector){0.0f, 0.0f, 1.0f};
+            axis_ray_origin = ray->origin.z;
             break;
         default:
             break;
@@ -171,23 +179,40 @@ struct CDTriangle *ray_helper(struct CDKDNode *node, struct CDRay *ray) {
 
     struct CDPoint intersection;
     float t;
-
     if(CDCollision_ray_plane(&intersection, &t, &plane, ray)) {
-        switch(node->axis) {
-            case CDKD_AXIS_X:
-                plane.n = (struct CDVector){1.0f, 0.0f, 0.0f};
-                break;
-            case CDKD_AXIS_Y:
-                plane.n = (struct CDVector){0.0f, 1.0f, 0.0f};
-                break;
-            case CDKD_AXIS_Z:
-                plane.n = (struct CDVector){0.0f, 0.0f, 1.0f};
-                break;
-            default:
-            break;
-        };
+        printf("ray collides with kd plane\n");
+        // ray collides with the dividing plane, visit the side
+        // containing the origin of the ray first, then the other side
+        if(axis_ray_origin < node->split) {
+            printf("checking left node\n");
+            struct CDTriangle *result = ray_helper(node->left, ray);
+            if(result == NULL) {
+                printf("not found in left node, checking right node\n");
+                result = ray_helper(node->right, ray);
+            }
+            return result;
+        } else {
+            // axis_ray_origin >= node->split
+            printf("checking right node\n");
+            struct CDTriangle *result = ray_helper(node->right, ray);
+            if(result == NULL) {
+                printf("not found in right node, checking left node\n");
+                result = ray_helper(node->left, ray);
+            }
+            return result;
+        }
+    } else {
+        printf("ray doesn't collide with kd plane\n");
+        // ray doesn't collide with plane, only visit the side
+        // containing the origin of the ray
+        if(axis_ray_origin < node->split) {
+            printf("checking left node only\n");
+            return ray_helper(node->left, ray);
+        } else {
+            printf("checking right node only\n");
+            return ray_helper(node->right, ray);
+        }
     }
-    return NULL;
 }
 
 struct CDTriangle *CDKDTree_ray(struct CDKDTree *tree,
