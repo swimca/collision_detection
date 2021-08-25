@@ -35,6 +35,7 @@ The following types have been defined for creating your own 3D values.
 * CDTriangle - a triangle in 3D space comprised of three vertices
 * CDMesh - a collection of triangles and the vertices they reference
 * CDKDTree - a kd tree that partitions a mesh of triangles
+* CDPlane - a distance and a unit normal
 
 # Tests
 The following functions have been defined for checking for collisions of
